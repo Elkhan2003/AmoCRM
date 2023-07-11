@@ -1,0 +1,30 @@
+[
+	{
+		"status_id": 58609110,
+		"name": "Elcho Effects",
+		"_embedded": {
+			"tags": [
+				{
+					"name": "freeusers"
+				}
+			],
+			"contacts": [
+				{
+					"first_name": "Elcho",
+					"last_name": "Effects",
+					"custom_fields_values": [
+						{
+							"field_code": "PHONE",
+							"values": [
+								{
+									"enum_code": "WORK",
+									"value": "+996990385056"
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	}
+]
