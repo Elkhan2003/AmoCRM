@@ -1,29 +1,12 @@
+import { config } from "dotenv";
+config();
 import fastify, { FastifyInstance } from "fastify";
-import fastifyEnv from "@fastify/env";
 import fastifyCors from "@fastify/cors";
 import routes from "./routes/route";
 
 const app: FastifyInstance = fastify({
 	logger: false
 });
-
-const schema = {
-	type: "object",
-	required: ["PORT"],
-	properties: {
-		PORT: {
-			type: "string",
-			default: 3000
-		}
-	}
-};
-
-const options = {
-	schema: schema,
-	dotenv: true
-};
-
-app.register(fastifyEnv, options);
 
 app.register(fastifyCors, {
 	origin: [
