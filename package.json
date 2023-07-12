@@ -14,7 +14,8 @@
 		"amocrm-js": "^3.4.2",
 		"axios": "^1.4.0",
 		"dotenv": "^16.3.1",
-		"fastify": "^4.19.2"
+		"fastify": "^4.19.2",
+		"fastify-cors": "^6.1.0"
 	},
 	"devDependencies": {
 		"@types/node": "^20.3.3",
