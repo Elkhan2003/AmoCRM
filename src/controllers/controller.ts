@@ -32,6 +32,12 @@ const filePath = path.resolve(__dirname, "../config/token.json");
 })();
 
 const controller = {
+	default: async (req: FastifyRequest, res: FastifyReply) => {
+		res.status(200).send({
+			message: "Hello World!"
+		});
+	},
+
 	get: async (req: FastifyRequest, res: FastifyReply) => {
 		try {
 			console.log("GET request...");
