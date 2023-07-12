@@ -6,7 +6,7 @@ dotenv.config();
 
 const app: FastifyInstance = fastify({
 	logger: false
-})
+});
 
 app.register(routes);
 
