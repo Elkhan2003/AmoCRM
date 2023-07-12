@@ -25,7 +25,7 @@ const filePath = path.resolve(__dirname, "../config/token.json");
 		console.log("Connecting to amoCRM...");
 		const status = await config_amoCRM.connection.connect();
 		console.log({ status });
-		console.log("Successfully connected");
+		console.log("Successfully connected 🦄");
 	} catch (err) {
 		console.log(`${err}`);
 	}
@@ -37,7 +37,7 @@ const controller = {
 			console.log("GET request...");
 			const result = await config_amoCRM.request.get("/api/v4/leads");
 
-			console.log("Successfully getting data ❤️");
+			console.log("Successfully getting data 🏃‍♂️🏃‍♀️");
 			return res.status(200).send({
 				message: result.data
 			});
@@ -56,7 +56,7 @@ const controller = {
 				query: req.params.query
 			});
 
-			console.log("Successfully getting data ❤️");
+			console.log("Successfully getting data 🏃‍♂️");
 			return res.status(200).send({
 				message: result.data
 			});
@@ -71,9 +71,9 @@ const controller = {
 			const requestData: any = req.body;
 			await config_amoCRM.request.post("/api/v4/leads/complex", requestData);
 
-			console.log("Successfully created ❤️");
+			console.log("Successfully created 🚀");
 			return res.status(200).send({
-				message: "Successfully created ❤️"
+				message: "Successfully created 🚀"
 			});
 		} catch (err) {
 			res.status(500).send(err);
