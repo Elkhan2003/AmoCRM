@@ -3,7 +3,7 @@ config();
 import { Client } from "amocrm-js";
 
 const config_amoCRM = new Client({
-	domain: process.env.AMOCRM_URL || "",
+	domain: process.env.AMOCRM_URL || "devx",
 	auth: {
 		client_id: process.env.AMOCRM_CLIENT_ID || "",
 		client_secret: process.env.AMOCRM_CLIENT_SECRET || "",
