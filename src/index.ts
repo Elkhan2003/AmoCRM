@@ -12,18 +12,7 @@ const app: FastifyInstance = fastify({
 app.register(fastifyCors, {
 	origin: [
 		"http://localhost:3000",
-		"http://localhost:3001",
 		"http://127.0.0.1:3000",
-		"http://127.0.0.1:3001",
-		"https://wedevx.co",
-		"https://app.wedevx.co",
-		"https://admin.wedevx.co",
-		"https://test.wedevx.co",
-		"https://test.app.wedevx.co",
-		"https://test.admin.wedevx.co",
-		"https://test-app.wedevx.co",
-		"https://test-admin.wedevx.co",
-		"https://flagcdn.com/",
 		"https://rest-api-amo-crm.vercel.app/"
 	],
 	credentials: true
