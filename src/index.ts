@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import fastify, { FastifyInstance } from "fastify";
+//@ts-ignore
 import fastifyCors from "fastify-cors";
 import routes from "./routes/route";
 
