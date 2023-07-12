@@ -11,26 +11,29 @@ const app: FastifyInstance = fastify({
 
 app.register(fastifyCors, {
 	origin: [
-		'http://localhost:3000',
-		'http://localhost:3001',
-		'http://127.0.0.1:3000',
-		'http://127.0.0.1:3001',
-		'https://wedevx.co',
-		'https://app.wedevx.co',
-		'https://admin.wedevx.co',
-		'https://test.wedevx.co',
-		'https://test.app.wedevx.co',
-		'https://test.admin.wedevx.co',
-		'https://test-app.wedevx.co',
-		'https://test-admin.wedevx.co',
-		'https://flagcdn.com/',
-		'https://rest-api-amo-crm.vercel.app/',
+		"http://localhost:3000",
+		"http://localhost:3001",
+		"http://127.0.0.1:3000",
+		"http://127.0.0.1:3001",
+		"https://wedevx.co",
+		"https://app.wedevx.co",
+		"https://admin.wedevx.co",
+		"https://test.wedevx.co",
+		"https://test.app.wedevx.co",
+		"https://test.admin.wedevx.co",
+		"https://test-app.wedevx.co",
+		"https://test-admin.wedevx.co",
+		"https://flagcdn.com/",
+		"https://rest-api-amo-crm.vercel.app/"
 	],
-	credentials: true,
+	credentials: true
 });
-app.register(routes);
 
-app.listen({ port: 3000 }, (err, address) => {
+app.register(routes, {
+	prefix: "/"
+});
+
+app.listen({ host: "localhost", port: 3000 }, (err, address) => {
 	if (err) {
 		app.log.error(err);
 		process.exit(1);
