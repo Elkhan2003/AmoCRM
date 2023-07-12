@@ -24,6 +24,7 @@ app.register(fastifyCors, {
 		'https://test-app.wedevx.co',
 		'https://test-admin.wedevx.co',
 		'https://flagcdn.com/',
+		'https://rest-api-amo-crm.vercel.app/',
 	],
 	credentials: true,
 });
