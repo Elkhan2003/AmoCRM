@@ -12,7 +12,8 @@ app.register(fastifyCors, {
 	origin: [
 		"http://localhost:3000",
 		"http://127.0.0.1:3000",
-		"https://rest-api-amo-crm.vercel.app/"
+		"https://rest-api-amo-crm.vercel.app",
+		"https://rest-api-amocrm-production.up.railway.app"
 	],
 	credentials: true
 });
