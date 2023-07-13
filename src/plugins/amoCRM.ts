@@ -1,9 +1,21 @@
 import path from "path";
 import fs from "fs";
-// экземпляр Client
+import { createClient } from "@supabase/supabase-js";
 import config_amoCRM from "../config/config_amoCRM";
 
-// принудительное обновление токена (если ранее не было запросов)
+const options = {
+	auth: {
+		persistSession: false
+	}
+};
+
+const supabase = createClient(
+	process.env.SUPABASE_URL || "",
+	process.env.SUPABASE_API_KEY || "",
+	options
+);
+
+// ! принудительное обновление токена (если ранее не было запросов)
 const updateConnection = async () => {
 	if (!config_amoCRM.connection.isTokenExpired()) {
 		return;
@@ -12,6 +24,7 @@ const updateConnection = async () => {
 };
 
 const run = async () => {
+	// ! save auth token
 	const filePath = path.resolve(__dirname, "../config/token.json");
 	let renewTimeout: NodeJS.Timeout;
 
@@ -20,12 +33,13 @@ const run = async () => {
 		fs.writeFileSync(filePath, JSON.stringify(token));
 
 		// обновление токена по истечению
-		const expiresIn = (token?.expires_in || 0) * 1000;
+		const expiresIn = (token?.expires_in ?? 0) * 1000;
 
 		clearTimeout(renewTimeout);
 		renewTimeout = setTimeout(updateConnection, expiresIn);
 	});
 
+	// ! get auth token
 	try {
 		const json = fs.readFileSync(filePath).toString();
 		const currentToken = JSON.parse(json);
@@ -33,4 +47,16 @@ const run = async () => {
 	} catch (err) {
 		console.log(`The token does not exist! ${err}`);
 	}
+
+	// ! connect to amoCRM
+	try {
+		console.log("Connecting to amoCRM...");
+		const status = await config_amoCRM.connection.connect();
+		console.log({ status });
+		console.log("Successfully connected 🦄");
+	} catch (err) {
+		console.log(`${err}`);
+	}
 };
+
+export default run;
