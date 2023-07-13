@@ -24,20 +24,26 @@ const updateConnection = async () => {
 };
 
 const run = async () => {
-	// ! save auth token
-	const filePath = path.resolve(__dirname, "../config/token.json");
-	let renewTimeout: NodeJS.Timeout;
+const filePath = path.resolve(__dirname, "../config/token.json");
+	// ! save auth token V1
+	// config_amoCRM.token.on("change", () => {
+	// 	const token = config_amoCRM.token.getValue();
+	// 	fs.writeFileSync(filePath, JSON.stringify(token));
+	// });
 
-	config_amoCRM.token.on("change", () => {
-		const token = config_amoCRM.token.getValue();
-		fs.writeFileSync(filePath, JSON.stringify(token));
+	// ! save auth token & refresh token V2
+	// let renewTimeout: NodeJS.Timeout;
 
-		// обновление токена по истечению
-		const expiresIn = (token?.expires_in ?? 0) * 1000;
+	// config_amoCRM.token.on("change", () => {
+	// 	const token = config_amoCRM.token.getValue();
+	// 	fs.writeFileSync(filePath, JSON.stringify(token));
 
-		clearTimeout(renewTimeout);
-		renewTimeout = setTimeout(updateConnection, expiresIn);
-	});
+	// 	// обновление токена по истечению
+	// 	const expiresIn = (token?.expires_in ?? 0) * 1000;
+
+	// 	clearTimeout(renewTimeout);
+	// 	renewTimeout = setTimeout(updateConnection, expiresIn);
+	// });
 
 	// ! get auth token
 	try {
