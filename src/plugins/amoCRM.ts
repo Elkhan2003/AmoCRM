@@ -1,19 +1,19 @@
 import path from "path";
 import fs from "fs";
 import config_amoCRM from "../config/config_amoCRM";
-// import { createClient } from "@supabase/supabase-js";
+import { createClient } from "@supabase/supabase-js";
 
-// const options = {
-// 	auth: {
-// 		persistSession: false
-// 	}
-// };
+const options = {
+	auth: {
+		persistSession: false
+	}
+};
 
-// const supabase = createClient(
-// 	process.env.SUPABASE_URL || "",
-// 	process.env.SUPABASE_API_KEY || "",
-// 	options
-// );
+const supabase = createClient(
+	process.env.SUPABASE_URL || "",
+	process.env.SUPABASE_API_KEY || "",
+	options
+);
 
 // ! принудительное обновление токена (если ранее не было запросов)
 const updateConnection = async () => {
