@@ -15,13 +15,13 @@ import config_amoCRM from "../config/config_amoCRM";
 // 	options
 // );
 
-// // ! принудительное обновление токена (если ранее не было запросов)
-// const updateConnection = async () => {
-// 	if (!config_amoCRM.connection.isTokenExpired()) {
-// 		return;
-// 	}
-// 	await config_amoCRM.connection.update();
-// };
+// ! принудительное обновление токена (если ранее не было запросов)
+const updateConnection = async () => {
+	if (!config_amoCRM.connection.isTokenExpired()) {
+		return;
+	}
+	await config_amoCRM.connection.update();
+};
 
 const run = async () => {
 	const filePath = path.resolve(__dirname, "../config/token.json");
