@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-// import auth_token from "../plugins/amoCRM";
-// auth_token();
+import auth_token from "../plugins/amoCRM";
+auth_token();
 import config_amoCRM from "../config/config_amoCRM";
 
 const controller = {

@@ -1,27 +1,27 @@
 import path from "path";
 import fs from "fs";
-import { createClient } from "@supabase/supabase-js";
 import config_amoCRM from "../config/config_amoCRM";
+// import { createClient } from "@supabase/supabase-js";
 
-const options = {
-	auth: {
-		persistSession: false
-	}
-};
+// const options = {
+// 	auth: {
+// 		persistSession: false
+// 	}
+// };
 
-const supabase = createClient(
-	process.env.SUPABASE_URL || "",
-	process.env.SUPABASE_API_KEY || "",
-	options
-);
+// const supabase = createClient(
+// 	process.env.SUPABASE_URL || "",
+// 	process.env.SUPABASE_API_KEY || "",
+// 	options
+// );
 
-// ! принудительное обновление токена (если ранее не было запросов)
-const updateConnection = async () => {
-	if (!config_amoCRM.connection.isTokenExpired()) {
-		return;
-	}
-	await config_amoCRM.connection.update();
-};
+// // ! принудительное обновление токена (если ранее не было запросов)
+// const updateConnection = async () => {
+// 	if (!config_amoCRM.connection.isTokenExpired()) {
+// 		return;
+// 	}
+// 	await config_amoCRM.connection.update();
+// };
 
 const run = async () => {
 	const filePath = path.resolve(__dirname, "../config/token.json");
