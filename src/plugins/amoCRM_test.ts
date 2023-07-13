@@ -25,6 +25,24 @@ const updateConnection = async () => {
 
 const run = async () => {
 	const filePath = path.resolve(__dirname, "../config/token.json");
+	// ! save auth token V1
+	config_amoCRM.token.on("change", () => {
+		const token = config_amoCRM.token.getValue();
+		fs.writeFileSync(filePath, JSON.stringify(token));
+	});
+
+	config_amoCRM.token.on("change", async () => {
+		const token = config_amoCRM.token.getValue();
+		try {
+			const { data, error } = await supabase
+				.from("table_name")
+				.insert([{ token }]);
+			console.log(data);
+		} catch (error) {
+			console.log(error);
+		}
+	});
+
 	// ! save auth token & refresh token
 	// let renewTimeout: NodeJS.Timeout;
 
