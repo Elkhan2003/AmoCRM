@@ -1,5 +1,3 @@
-import path from "path";
-import fs from "fs";
 import config_amoCRM from "../config/config_amoCRM";
 import { createClient } from "@supabase/supabase-js";
 
@@ -15,11 +13,6 @@ const supabase = createClient(
 	options
 );
 
-(async () => {
-	const { data, error } = await supabase.from("elcho911").select();
-	console.log(data);
-})();
-
 // ! принудительное обновление токена (если ранее не было запросов)
 const updateConnection = async () => {
 	if (!config_amoCRM.connection.isTokenExpired()) {
@@ -29,20 +22,23 @@ const updateConnection = async () => {
 };
 
 const run = async () => {
-	const filePath = path.resolve(__dirname, "../config/token.json");
-
-	// ! save auth token V1
-	// config_amoCRM.token.on("change", () => {
-	// 	const token = config_amoCRM.token.getValue();
-	// 	fs.writeFileSync(filePath, JSON.stringify(token));
-	// });
-
 	// ! save auth token & refresh token V2
 	// let renewTimeout: NodeJS.Timeout;
-
-	// config_amoCRM.token.on("change", () => {
+	// config_amoCRM.token.on("change", async () => {
 	// 	const token = config_amoCRM.token.getValue();
-	// 	fs.writeFileSync(filePath, JSON.stringify(token));
+	// 	console.log(token);
+	// 	try {
+	// 		const { data, error } = await supabase
+	// 			.from("elcho911")
+	// 			.update(token)
+	// 			.eq("id", 1);
+	// 		if (error) {
+	// 			console.log("Could not fetch the elcho911");
+	// 			console.log(error);
+	// 		}
+	// 	} catch (err) {
+	// 		console.log(`${err}`);
+	// 	}
 
 	// 	// обновление токена по истечению
 	// 	const expiresIn = (token?.expires_in ?? 0) * 1000;
@@ -53,9 +49,15 @@ const run = async () => {
 
 	// ! get auth token
 	try {
-		const json = fs.readFileSync(filePath).toString();
-		const currentToken = JSON.parse(json);
-		config_amoCRM.token.setValue(currentToken);
+		const { data, error }: any = await supabase
+			.from("elcho911")
+			.select()
+			.single();
+		if (error) {
+			console.log(error);
+		} else {
+			config_amoCRM.token.setValue(data);
+		}
 	} catch (err) {
 		console.log(`The token does not exist! ${err}`);
 	}
