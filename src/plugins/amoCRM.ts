@@ -15,6 +15,11 @@ const supabase = createClient(
 	options
 );
 
+(async () => {
+	const { data, error } = await supabase.from("elcho911").select();
+	console.log(data);
+})();
+
 // ! принудительное обновление токена (если ранее не было запросов)
 const updateConnection = async () => {
 	if (!config_amoCRM.connection.isTokenExpired()) {

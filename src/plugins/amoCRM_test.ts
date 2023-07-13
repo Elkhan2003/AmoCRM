@@ -35,8 +35,12 @@ const run = async () => {
 		const token = config_amoCRM.token.getValue();
 		try {
 			const { data, error } = await supabase
-				.from("table_name")
+				.from("elcho911")
 				.insert([{ token }]);
+			if (error) {
+				console.log("Could not fetch the elcho911");
+				console.log(error);
+			}
 			console.log(data);
 		} catch (error) {
 			console.log(error);
@@ -78,3 +82,11 @@ const run = async () => {
 };
 
 export default run;
+
+// int2
+// int4
+// int8
+// float4
+// float8
+// numeric
+// {} json
