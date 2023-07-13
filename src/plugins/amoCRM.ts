@@ -10,8 +10,8 @@ const options = {
 };
 
 const supabase = createClient(
-	process.env.SUPABASE_URL || "",
-	process.env.SUPABASE_API_KEY || "",
+	"https://vermojctkdkrdsxvauwc.supabase.co",
+	"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlcm1vamN0a2RrcmRzeHZhdXdjIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODkyMjcxNjUsImV4cCI6MjAwNDgwMzE2NX0.VAkb_1n5OTF-GT9Js2FqEJh0oI9Rm2F47BqrkjhAPIo",
 	options
 );
 
