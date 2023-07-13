@@ -24,7 +24,8 @@ const updateConnection = async () => {
 };
 
 const run = async () => {
-const filePath = path.resolve(__dirname, "../config/token.json");
+	const filePath = path.resolve(__dirname, "../config/token.json");
+
 	// ! save auth token V1
 	// config_amoCRM.token.on("change", () => {
 	// 	const token = config_amoCRM.token.getValue();
