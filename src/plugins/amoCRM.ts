@@ -23,29 +23,27 @@ const updateConnection = async () => {
 
 const run = async () => {
 	// ! save auth token & refresh token V2
-	// let renewTimeout: NodeJS.Timeout;
-	// config_amoCRM.token.on("change", async () => {
-	// 	const token = config_amoCRM.token.getValue();
-	// 	console.log(token);
-	// 	try {
-	// 		const { data, error } = await supabase
-	// 			.from("elcho911")
-	// 			.update(token)
-	// 			.eq("id", 1);
-	// 		if (error) {
-	// 			console.log("Could not fetch the elcho911");
-	// 			console.log(error);
-	// 		}
-	// 	} catch (err) {
-	// 		console.log(`${err}`);
-	// 	}
+	let renewTimeout: NodeJS.Timeout;
+	config_amoCRM.token.on("change", async () => {
+		const token = config_amoCRM.token.getValue();
+		try {
+			const { data, error } = await supabase
+				.from("elcho911")
+				.upsert(token)
+				.eq("id", 1);
+			if (error) {
+				console.log(error);
+			}
+		} catch (err) {
+			console.log(`${err}`);
+		}
 
-	// 	// обновление токена по истечению
-	// 	const expiresIn = (token?.expires_in ?? 0) * 1000;
+		// обновление токена по истечению
+		const expiresIn = (token?.expires_in ?? 0) * 1000;
 
-	// 	clearTimeout(renewTimeout);
-	// 	renewTimeout = setTimeout(updateConnection, expiresIn);
-	// });
+		clearTimeout(renewTimeout);
+		renewTimeout = setTimeout(updateConnection, expiresIn);
+	});
 
 	// ! get auth token
 	try {
