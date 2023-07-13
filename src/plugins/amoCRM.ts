@@ -28,7 +28,7 @@ const run = async () => {
 		const token = config_amoCRM.token.getValue();
 		try {
 			const { data, error } = await supabase
-				.from("elcho911")
+				.from("devx")
 				.upsert(token)
 				.eq("id", 1);
 			if (error) {
@@ -48,7 +48,7 @@ const run = async () => {
 	// ! get auth token
 	try {
 		const { data, error }: any = await supabase
-			.from("elcho911")
+			.from("devx")
 			.select()
 			.single();
 		if (error) {
