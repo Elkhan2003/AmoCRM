@@ -1,11 +1,7 @@
 import config_amoCRM from "../config/config_amoCRM";
 import { createClient } from "@supabase/supabase-js";
-import Agent from "agentkeepalive";
-
-const agent = new Agent.HttpsAgent();
 
 const options = {
-	agent,
 	auth: {
 		persistSession: false
 	}
@@ -18,20 +14,20 @@ const supabase = createClient(
 );
 
 // ! Выполнение запроса SELECT каждые 5 минут (для поддержки соединения к базе)
-// setInterval(async () => {
-// 	try {
-// 		const { data, error } = await supabase.from("devx").select("*");
+setInterval(async () => {
+	try {
+		const { data, error } = await supabase.from("devx").select("*");
 
-// 		if (error) {
-// 			console.error(error);
-// 			return;
-// 		}
+		if (error) {
+			console.error(error);
+			return;
+		}
 
-// 		console.log("Auto connection to the base (every 3 min)");
-// 	} catch (error) {
-// 		console.error(error);
-// 	}
-// }, 3 * 60 * 1000);
+		console.log("Auto connection to the base (every 1 min)");
+	} catch (error) {
+		console.error(error);
+	}
+}, 1 * 60 * 1000);
 
 // ! принудительное обновление токена (если ранее не было запросов)
 const updateConnection = async () => {
