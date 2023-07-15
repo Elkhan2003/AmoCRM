@@ -68,7 +68,6 @@ const run = async () => {
 			console.log(error);
 		} else {
 			config_amoCRM.token.setValue(data);
-			console.log(data)
 		}
 	} catch (err) {
 		console.log(`The token does not exist! ${err}`);
