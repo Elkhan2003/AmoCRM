@@ -14,20 +14,20 @@ const supabase = createClient(
 );
 
 // ! Выполнение запроса SELECT каждую 1 минут (для поддержки соединения к базе)
-setInterval(async () => {
-	try {
-		const { data, error } = await supabase.from("devx").select("*");
+// setInterval(async () => {
+// 	try {
+// 		const { data, error } = await supabase.from("devx").select();
 
-		if (error) {
-			console.error(error);
-			return;
-		}
+// 		if (error) {
+// 			console.error(error);
+// 			return;
+// 		}
 
-		console.log("Auto connection to the base (every 1 min)");
-	} catch (error) {
-		console.error(error);
-	}
-}, 1 * 60 * 1000);
+// 		console.log("Auto connection to the base (every 1 min)");
+// 	} catch (error) {
+// 		console.error(error);
+// 	}
+// }, 1 * 60 * 1000);
 
 // ! принудительное обновление токена (если ранее не было запросов)
 const updateConnection = async () => {
@@ -68,6 +68,7 @@ const run = async () => {
 			console.log(error);
 		} else {
 			config_amoCRM.token.setValue(data);
+			console.log(data)
 		}
 	} catch (err) {
 		console.log(`The token does not exist! ${err}`);
