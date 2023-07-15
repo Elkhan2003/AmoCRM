@@ -13,7 +13,7 @@ const supabase = createClient(
 	options
 );
 
-// ! Выполнение запроса SELECT каждые 5 минут (для поддержки соединения к базе)
+// ! Выполнение запроса SELECT каждую 1 минут (для поддержки соединения к базе)
 setInterval(async () => {
 	try {
 		const { data, error } = await supabase.from("devx").select("*");
