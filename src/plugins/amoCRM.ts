@@ -44,6 +44,7 @@ const run = async () => {
 			const { data, error } = await supabase
 				.from("devx")
 				.update(token)
+				.eq('id', 1)
 			if (error) {
 				console.log(error);
 			}
