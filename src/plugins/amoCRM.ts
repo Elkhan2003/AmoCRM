@@ -13,7 +13,7 @@ const supabase = createClient(
 	options
 );
 
-// ! Выполнение запроса GET каждую 3 минут (для проверки актуальности токена)
+// ! Выполнение запроса GET каждый 3 минут (для проверки актуальности токена)
 const yourFunction = async () => {
 	try {
 		await config_amoCRM.request.get("/api/v4/leads/custom_fields");
