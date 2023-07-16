@@ -8,6 +8,10 @@ const app: FastifyInstance = fastify({
 	logger: false,
 });
 
+const timeZone = new Date().toLocaleString("ru-RU", {
+	timeZone: "Asia/Bishkek",
+});
+
 app.register(fastifyCors, {
 	origin: [
 		"http://localhost:3000",
@@ -30,10 +34,7 @@ app.listen({ port: PORT, host: "0.0.0.0" }, (err, address) => {
 		app.log.error(err);
 		process.exit(1);
 	}
+	console.log("Server started:", timeZone, "🚀");
 });
 
-// Получаем строку в локальном формате для Бишкека
-const timeZone = new Date().toLocaleString("ru-RU", {
-	timeZone: "Asia/Bishkek",
-});
-console.log("Server started:", timeZone, "🚀");
+export { timeZone };

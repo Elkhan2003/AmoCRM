@@ -3,8 +3,8 @@ import { createClient } from "@supabase/supabase-js";
 
 const options = {
 	auth: {
-		persistSession: false
-	}
+		persistSession: false,
+	},
 };
 
 const supabase = createClient(
@@ -30,7 +30,8 @@ const updateConnection = async () => {
 		return;
 	}
 	await config_amoCRM.connection.update();
-	console.log("Token updated:", new Date().toLocaleString(), "☘️");
+	const { timeZone } = await import("../index");
+	console.log("Token updated:", timeZone, "☘️");
 };
 
 const run = async () => {
