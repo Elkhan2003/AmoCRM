@@ -43,8 +43,7 @@ const run = async () => {
 		try {
 			const { data, error } = await supabase
 				.from("devx")
-				.upsert(token)
-				.select();
+				.update(token)
 			if (error) {
 				console.log(error);
 			}
