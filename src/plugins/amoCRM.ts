@@ -1,4 +1,3 @@
-import { FastifyReply, FastifyRequest } from "fastify";
 import config_amoCRM from "../config/config_amoCRM";
 import { createClient } from "@supabase/supabase-js";
 
@@ -15,17 +14,15 @@ const supabase = createClient(
 );
 
 // ! Выполнение запроса GET каждую duration минут (для поддержки соединения к базе)
-const duration = 1;
-setInterval(async (req: FastifyRequest, res: FastifyReply) => {
+const duration = 2;
+const yourFunction = async () => {
 	try {
-		console.log("GET request...");
 		await config_amoCRM.request.get("/api/v4/leads/custom_fields");
-
-		console.log("Successfully refresh ☘️");
 	} catch (err) {
 		console.log(`${err}`);
 	}
-}, duration * 60 * 1000);
+};
+setInterval(yourFunction, duration * 60 * 1000);
 
 // ! принудительное обновление токена (если ранее не было запросов)
 const updateConnection = async () => {
@@ -33,6 +30,7 @@ const updateConnection = async () => {
 		return;
 	}
 	await config_amoCRM.connection.update();
+	console.log("Token updated:", new Date().toLocaleString(), "☘️");
 };
 
 const run = async () => {
@@ -42,11 +40,13 @@ const run = async () => {
 		const token = config_amoCRM.token.getValue();
 		try {
 			const { data, error } = await supabase
-				.from("devx")
+				.from(process.env.SUPABASE_TABLE || "")
 				.update(token)
-				.eq('id', 1)
+				.eq("id", 1);
 			if (error) {
 				console.log(error);
+			} else {
+				data;
 			}
 		} catch (err) {
 			console.log(`${err}`);
@@ -61,7 +61,10 @@ const run = async () => {
 
 	// ! get auth token
 	try {
-		const { data, error }: any = await supabase.from("devx").select().single();
+		const { data, error }: any = await supabase
+			.from(process.env.SUPABASE_TABLE || "")
+			.select()
+			.single();
 		if (error) {
 			console.log(error);
 		} else {
