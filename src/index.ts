@@ -5,7 +5,7 @@ import fastifyCors from "@fastify/cors";
 import routes from "./routes/route";
 
 const app: FastifyInstance = fastify({
-	logger: false
+	logger: false,
 });
 
 app.register(fastifyCors, {
@@ -14,13 +14,13 @@ app.register(fastifyCors, {
 		"http://127.0.0.1:3000",
 		"https://rest-api-amo-crm.vercel.app",
 		"https://rest-api-amocrm-production.up.railway.app",
-		"https://server-production-374b.up.railway.app"
+		"https://server-production-374b.up.railway.app",
 	],
-	credentials: true
+	credentials: true,
 });
 
 app.register(routes, {
-	prefix: "/"
+	prefix: "/",
 });
 
 const PORT: any = process.env.PORT;
@@ -31,3 +31,5 @@ app.listen({ port: PORT, host: "0.0.0.0" }, (err, address) => {
 		process.exit(1);
 	}
 });
+
+console.log("Server started:", new Date().toLocaleString(), "🚀");
