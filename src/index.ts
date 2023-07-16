@@ -32,11 +32,8 @@ app.listen({ port: PORT, host: "0.0.0.0" }, (err, address) => {
 	}
 });
 
-// Создаем объект даты
-let date = new Date();
-
-// Устанавливаем часовой пояс
-date.setUTCHours(date.getUTCHours() + 6);
-
 // Получаем строку в локальном формате для Бишкека
-console.log("Server started:", date.toLocaleString("ru-RU", { timeZone: "Asia/Bishkek" }), "🚀");
+const timeZone = new Date().toLocaleString("ru-RU", {
+	timeZone: "Asia/Bishkek",
+});
+console.log("Server started:", timeZone, "🚀");
