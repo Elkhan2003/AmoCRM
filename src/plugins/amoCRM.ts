@@ -13,8 +13,7 @@ const supabase = createClient(
 	options
 );
 
-// ! Выполнение запроса GET каждую duration минут (для поддержки соединения к базе)
-const duration = 2;
+// ! Выполнение запроса GET каждую 3 минут (для проверки актуальности токена)
 const yourFunction = async () => {
 	try {
 		await config_amoCRM.request.get("/api/v4/leads/custom_fields");
@@ -22,7 +21,7 @@ const yourFunction = async () => {
 		console.log(`${err}`);
 	}
 };
-setInterval(yourFunction, duration * 60 * 1000);
+setInterval(yourFunction, 3 * 60 * 1000);
 
 // ! принудительное обновление токена (если ранее не было запросов)
 const updateConnection = async () => {
