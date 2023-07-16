@@ -4,7 +4,7 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"start": "nodemon --omit=dev src/index.ts",
+		"start": "node src/index.ts",
 		"dev": "nodemon src/index.ts"
 	},
 	"keywords": [],
