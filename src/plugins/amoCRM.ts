@@ -52,7 +52,7 @@ const run = async () => {
 			console.log(`${err}`);
 		}
 
-		// обновление токена по истечению
+		// ! обновление токена по истечению
 		const expiresIn = (token?.expires_in ?? 0) * 1000;
 
 		clearTimeout(renewTimeout);
