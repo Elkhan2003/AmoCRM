@@ -1,3 +1,4 @@
+import { FastifyReply, FastifyRequest } from "fastify";
 import config_amoCRM from "../config/config_amoCRM";
 import { createClient } from "@supabase/supabase-js";
 
@@ -13,21 +14,18 @@ const supabase = createClient(
 	options
 );
 
-// ! Выполнение запроса SELECT каждую 2 минут (для поддержки соединения к базе)
-setInterval(async () => {
+// ! Выполнение запроса GET каждую duration минут (для поддержки соединения к базе)
+const duration = 1;
+setInterval(async (req: FastifyRequest, res: FastifyReply) => {
 	try {
-		const { data, error } = await supabase.from("devx").select();
+		console.log("GET request...");
+		await config_amoCRM.request.get("/api/v4/leads/custom_fields");
 
-		if (error) {
-			console.error(error);
-			return;
-		}
-
-		console.log("Auto connection to the base (every 1 min)");
-	} catch (error) {
-		console.error(error);
+		console.log("Successfully refresh ☘️");
+	} catch (err) {
+		console.log(`${err}`);
 	}
-}, 2 * 60 * 1000);
+}, duration * 60 * 1000);
 
 // ! принудительное обновление токена (если ранее не было запросов)
 const updateConnection = async () => {
