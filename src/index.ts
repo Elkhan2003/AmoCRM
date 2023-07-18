@@ -3,6 +3,7 @@ config();
 import fastify, { FastifyInstance } from "fastify";
 import fastifyCors from "@fastify/cors";
 import routes from "./routes/route";
+import { amoCRM } from "./plugins/amoCRM";
 
 const app: FastifyInstance = fastify({
 	logger: false,
@@ -22,6 +23,8 @@ app.register(fastifyCors, {
 	],
 	credentials: true,
 });
+
+app.register(amoCRM);
 
 app.register(routes, {
 	prefix: "/",

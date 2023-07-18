@@ -1,58 +1,66 @@
-import config_amoCRM from "../config/config_amoCRM";
-import { createClient } from "@supabase/supabase-js";
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
+import { Client } from "amocrm-js";
 
-const options = {
+const config_amoCRM = new Client({
+	domain: process.env.AMOCRM_URL || "devx.amocrm.ru",
 	auth: {
-		persistSession: false,
+		client_id: process.env.AMOCRM_CLIENT_ID || "",
+		client_secret: process.env.AMOCRM_CLIENT_SECRET || "",
+		redirect_uri: process.env.AMOCRM_REDIRECT_URI || "",
+		code: process.env.AMOCRM_CODE || "",
 	},
-};
+});
 
-const supabase = createClient(
-	process.env.SUPABASE_URL || "",
-	process.env.SUPABASE_API_KEY || "",
-	options
-);
+// ! executing a GET request every 3 minutes (to check the validity of the token)
+// const checkToken = async () => {
+// 	try {
+// 		await config_amoCRM.request.get("/api/v4/leads/custom_fields");
+// 	} catch (err) {
+// 		console.log(`${err}`);
+// 	}
+// };
+// setInterval(checkToken, 3 * 60 * 1000);
 
-// ! Выполнение запроса GET каждые 3 минуты (для проверки актуальности токена)
-const yourFunction = async () => {
-	try {
-		await config_amoCRM.request.get("/api/v4/leads/custom_fields");
-	} catch (err) {
-		console.log(`${err}`);
-	}
-};
-setInterval(yourFunction, 3 * 60 * 1000);
-
-// ! принудительное обновление токена (если ранее не было запросов)
+// ! forced token update (if there were no requests earlier)
 const updateConnection = async () => {
 	if (!config_amoCRM.connection.isTokenExpired()) {
 		return;
+	} else {
+		await config_amoCRM.connection.update();
 	}
-	await config_amoCRM.connection.update();
-	const { timeZone } = await import("../index");
-	console.log("Token updated:", timeZone, "☘️");
 };
 
-const run = async () => {
-	// ! save auth token & refresh token V2
+const amoCRM = async () => {
+	// ! save accessToken & refreshToken + token validity period
 	let renewTimeout: NodeJS.Timeout;
 	config_amoCRM.token.on("change", async () => {
 		const token = config_amoCRM.token.getValue();
 		try {
-			const { data, error } = await supabase
-				.from(process.env.SUPABASE_TABLE || "")
-				.update(token)
-				.eq("id", 1);
-			if (error) {
-				console.log(error);
+			// Check if the data exists in the database
+			const existingData = await prisma.amoCRM.findUnique({
+				where: { id: 1 },
+			});
+
+			if (existingData) {
+				// If the data exists, perform the update operation
+				await prisma.amoCRM.update({
+					where: { id: 1 },
+					//@ts-ignore
+					data: token,
+				});
 			} else {
-				data;
+				// If the data does not exist, perform the create operation
+				await prisma.amoCRM.create({
+					//@ts-ignore
+					data: token,
+				});
 			}
-		} catch (err) {
-			console.log(`${err}`);
+		} catch (error) {
+			console.log(error);
 		}
 
-		// ! обновление токена по истечению
+		// ! token renewal upon expiration
 		const expiresIn = (token?.expires_in ?? 0) * 1000;
 
 		clearTimeout(renewTimeout);
@@ -61,17 +69,15 @@ const run = async () => {
 
 	// ! get auth token
 	try {
-		const { data, error }: any = await supabase
-			.from(process.env.SUPABASE_TABLE || "")
-			.select()
-			.single();
-		if (error) {
-			console.log(error);
-		} else {
+		const data = await prisma.amoCRM.findUnique({ where: { id: 1 } });
+		if (data) {
+			//@ts-ignore
 			config_amoCRM.token.setValue(data);
+		} else {
+			console.log("The token does not exist!");
 		}
-	} catch (err) {
-		console.log(`The token does not exist! ${err}`);
+	} catch (error) {
+		console.log(`The token does not exist! ${error}`);
 	}
 
 	// ! connect to amoCRM
@@ -85,4 +91,4 @@ const run = async () => {
 	}
 };
 
-export default run;
+export { amoCRM, config_amoCRM };
