@@ -3,7 +3,17 @@ config();
 import fastify, { FastifyInstance } from "fastify";
 import fastifyCors from "@fastify/cors";
 import routes from "./routes/route";
-import { amoCRM } from "./plugins/amoCRM";
+import prisma from "./plugins/prisma";
+import { PrismaClient } from "@prisma/client";
+import amoCRM from "./plugins/amoCRM";
+import { Client } from "amocrm-js";
+
+declare module "fastify" {
+	interface FastifyInstance {
+		prisma: PrismaClient;
+		config_amoCRM: Client;
+	}
+}
 
 const app: FastifyInstance = fastify({
 	logger: false,
@@ -24,6 +34,7 @@ app.register(fastifyCors, {
 	credentials: true,
 });
 
+app.register(prisma);
 app.register(amoCRM);
 
 app.register(routes, {

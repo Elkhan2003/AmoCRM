@@ -1,58 +1,53 @@
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
+import { FastifyInstance } from "fastify";
 import { Client } from "amocrm-js";
+import fp from "fastify-plugin";
 
-const config_amoCRM = new Client({
-	domain: process.env.AMOCRM_URL || "devx.amocrm.ru",
-	auth: {
-		client_id: process.env.AMOCRM_CLIENT_ID || "",
-		client_secret: process.env.AMOCRM_CLIENT_SECRET || "",
-		redirect_uri: process.env.AMOCRM_REDIRECT_URI || "",
-		code: process.env.AMOCRM_CODE || "",
-	},
-});
+interface tokenType {
+	id: number;
+	token_type: string;
+	expires_in: number;
+	access_token: string;
+	refresh_token: string;
+	expires_at: number;
+}
 
-// ! executing a GET request every 3 minutes (to check the validity of the token)
-// const checkToken = async () => {
-// 	try {
-// 		await config_amoCRM.request.get("/api/v4/leads/custom_fields");
-// 	} catch (err) {
-// 		console.log(`${err}`);
-// 	}
-// };
-// setInterval(checkToken, 3 * 60 * 1000);
+const amoCRM = async (app: FastifyInstance) => {
+	// ! config amoCRM
+	const config_amoCRM = new Client({
+		domain: process.env.AMOCRM_URL || "devx.amocrm.ru",
+		auth: {
+			client_id: process.env.AMOCRM_CLIENT_ID || "",
+			client_secret: process.env.AMOCRM_CLIENT_SECRET || "",
+			redirect_uri: process.env.AMOCRM_REDIRECT_URI || "",
+			code: process.env.AMOCRM_CODE || "",
+		},
+	});
 
-// ! forced token update (if there were no requests earlier)
-const updateConnection = async () => {
-	if (!config_amoCRM.connection.isTokenExpired()) {
-		return;
-	} else {
-		await config_amoCRM.connection.update();
-	}
-};
+	// ! forced token update (if there were no requests earlier)
+	const updateConnection = async () => {
+		if (!config_amoCRM.connection.isTokenExpired()) {
+			return;
+		} else {
+			await config_amoCRM.connection.update();
+		}
+	};
 
-const amoCRM = async () => {
-	// ! save accessToken & refreshToken + token validity period
+	// ! save token
 	let renewTimeout: NodeJS.Timeout;
+	// If "change" detects any modifications in the "token," it will update the token in Supabase
 	config_amoCRM.token.on("change", async () => {
-		const token = config_amoCRM.token.getValue();
+		const token: tokenType = config_amoCRM.token.getValue() as tokenType;
 		try {
-			// Check if the data exists in the database
-			const existingData = await prisma.amoCRM.findUnique({
+			const existingData = await app.prisma.amoCRM.findUnique({
 				where: { id: 1 },
 			});
-
 			if (existingData) {
-				// If the data exists, perform the update operation
-				await prisma.amoCRM.update({
+				await app.prisma.amoCRM.update({
 					where: { id: 1 },
-					//@ts-ignore
 					data: token,
 				});
 			} else {
-				// If the data does not exist, perform the create operation
-				await prisma.amoCRM.create({
-					//@ts-ignore
+				await app.prisma.amoCRM.create({
 					data: token,
 				});
 			}
@@ -60,24 +55,32 @@ const amoCRM = async () => {
 			console.log(error);
 		}
 
-		// ! token renewal upon expiration
+		// token renewal upon expiration
 		const expiresIn = (token?.expires_in ?? 0) * 1000;
-
 		clearTimeout(renewTimeout);
 		renewTimeout = setTimeout(updateConnection, expiresIn);
 	});
 
-	// ! get auth token
+	// ! get token
 	try {
-		const data = await prisma.amoCRM.findUnique({ where: { id: 1 } });
+		const data = await app.prisma.amoCRM.findUnique({ where: { id: 1 } });
 		if (data) {
-			//@ts-ignore
-			config_amoCRM.token.setValue(data);
+			// Convert Decimal to number
+			const tokenData: tokenType = {
+				id: data.id,
+				token_type: data.token_type,
+				expires_in: +data.expires_in,
+				access_token: data.access_token,
+				refresh_token: data.refresh_token,
+				expires_at: +data.expires_at,
+			};
+
+			config_amoCRM.token.setValue(tokenData);
 		} else {
 			console.log("The token does not exist!");
 		}
 	} catch (error) {
-		console.log(`The token does not exist! ${error}`);
+		console.log(`${error}`);
 	}
 
 	// ! connect to amoCRM
@@ -89,6 +92,8 @@ const amoCRM = async () => {
 	} catch (err) {
 		console.log(`${err}`);
 	}
+
+	app.decorate("config_amoCRM", config_amoCRM);
 };
 
-export { amoCRM, config_amoCRM };
+export default fp(amoCRM);

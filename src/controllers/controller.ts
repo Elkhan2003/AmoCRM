@@ -1,5 +1,4 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { config_amoCRM } from "../plugins/amoCRM";
 
 const controller = {
 	default: async (req: FastifyRequest, res: FastifyReply) => {
@@ -11,7 +10,9 @@ const controller = {
 	get: async (req: FastifyRequest, res: FastifyReply) => {
 		try {
 			console.log("GET request...");
-			const result = await config_amoCRM.request.get("/api/v4/leads");
+			const result = await req.server.config_amoCRM.request.get(
+				"/api/v4/leads"
+			);
 
 			console.log("Successfully getting data 🏃‍♂️🏃‍♀️");
 			return res.status(200).send({
@@ -28,9 +29,12 @@ const controller = {
 	) => {
 		try {
 			console.log("GET request with query:", req.params.query);
-			const result = await config_amoCRM.request.get("/api/v4/leads", {
-				query: req.params.query,
-			});
+			const result = await req.server.config_amoCRM.request.get(
+				"/api/v4/leads",
+				{
+					query: req.params.query,
+				}
+			);
 
 			console.log("Successfully getting data 🏃‍♂️");
 			return res.status(200).send({
@@ -45,7 +49,10 @@ const controller = {
 		try {
 			console.log("POST request...");
 			const requestData: any = req.body;
-			await config_amoCRM.request.post("/api/v4/leads/complex", requestData);
+			await req.server.config_amoCRM.request.post(
+				"/api/v4/leads/complex",
+				requestData
+			);
 
 			console.log("Successfully created 🚀");
 			return res.status(200).send({
