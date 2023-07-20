@@ -11,44 +11,46 @@ import { Client } from "amocrm-js";
 declare module "fastify" {
 	interface FastifyInstance {
 		prisma: PrismaClient;
-		config_amoCRM: Client;
+		client_amoCRM: Client;
 	}
 }
 
-const app: FastifyInstance = fastify({
-	logger: false,
-});
+const start = async () => {
+	const server: FastifyInstance = fastify({
+		logger: false,
+	});
 
-const timeZone = new Date().toLocaleString("ru-RU", {
-	timeZone: "Asia/Bishkek",
-});
+	server.register(fastifyCors, {
+		origin: [
+			"http://localhost:3000",
+			"http://127.0.0.1:3000",
+			"https://amocrm-production.up.railway.app",
+		],
+		credentials: true,
+	});
 
-app.register(fastifyCors, {
-	origin: [
-		"http://localhost:3000",
-		"http://127.0.0.1:3000",
-		"https://rest-api-amo-crm.vercel.app",
-		"https://rest-api-amocrm-production.up.railway.app",
-		"https://server-production-374b.up.railway.app",
-	],
-	credentials: true,
-});
+	server.register(prisma);
+	server.register(amoCRM);
 
-app.register(prisma);
-app.register(amoCRM);
+	server.register(routes, {
+		prefix: "/",
+	});
 
-app.register(routes, {
-	prefix: "/",
-});
+	const PORT: any = process.env.PORT || 3000;
 
-const PORT: any = process.env.PORT;
+	try {
+		const address = await server.listen({
+			port: PORT,
+			host: "0.0.0.0",
+		});
 
-app.listen({ port: PORT, host: "0.0.0.0" }, (err, address) => {
-	if (err) {
-		app.log.error(err);
+		console.log(`${new Date()}`);
+		console.log("server running at: " + address);
+	} catch (error) {
+		console.error(error);
 		process.exit(1);
 	}
-	console.log("Server started:", timeZone, "🚀");
-});
 
-export { timeZone };
+	return server;
+};
+start();

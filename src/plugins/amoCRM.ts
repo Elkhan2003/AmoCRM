@@ -13,7 +13,7 @@ interface tokenType {
 
 const amoCRM = async (app: FastifyInstance) => {
 	// ! config amoCRM
-	const config_amoCRM = new Client({
+	const client_amoCRM = new Client({
 		domain: process.env.AMOCRM_URL || "devx.amocrm.ru",
 		auth: {
 			client_id: process.env.AMOCRM_CLIENT_ID || "",
@@ -25,18 +25,18 @@ const amoCRM = async (app: FastifyInstance) => {
 
 	// ! forced token update (if there were no requests earlier)
 	const updateConnection = async () => {
-		if (!config_amoCRM.connection.isTokenExpired()) {
+		if (!client_amoCRM.connection.isTokenExpired()) {
 			return;
 		} else {
-			await config_amoCRM.connection.update();
+			await client_amoCRM.connection.update();
 		}
 	};
 
 	// ! save token
 	let renewTimeout: NodeJS.Timeout;
 	// If "change" detects any modifications in the "token," it will update the token in Supabase
-	config_amoCRM.token.on("change", async () => {
-		const token: tokenType = config_amoCRM.token.getValue() as tokenType;
+	client_amoCRM.token.on("change", async () => {
+		const token: tokenType = client_amoCRM.token.getValue() as tokenType;
 		try {
 			const existingData = await app.prisma.amoCRM.findUnique({
 				where: { id: 1 },
@@ -75,7 +75,7 @@ const amoCRM = async (app: FastifyInstance) => {
 				expires_at: +data.expires_at,
 			};
 
-			config_amoCRM.token.setValue(tokenData);
+			client_amoCRM.token.setValue(tokenData);
 		} else {
 			console.log("The token does not exist!");
 		}
@@ -86,14 +86,14 @@ const amoCRM = async (app: FastifyInstance) => {
 	// ! connect to amoCRM
 	try {
 		console.log("Connecting to amoCRM...");
-		const status = await config_amoCRM.connection.connect();
+		const status = await client_amoCRM.connection.connect();
 		console.log({ status });
 		console.log("Successfully connected 🦄");
 	} catch (err) {
 		console.log(`${err}`);
 	}
 
-	app.decorate("config_amoCRM", config_amoCRM);
+	app.decorate("client_amoCRM", client_amoCRM);
 };
 
 export default fp(amoCRM);

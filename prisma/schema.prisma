@@ -12,7 +12,6 @@ datasource db {
 
 model amoCRM {
   id            Int       @id @default(autoincrement())
-  created_at    DateTime? @default(now())
   token_type    String
   expires_in    Decimal
   access_token  String

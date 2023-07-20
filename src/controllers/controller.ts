@@ -10,7 +10,7 @@ const controller = {
 	get: async (req: FastifyRequest, res: FastifyReply) => {
 		try {
 			console.log("GET request...");
-			const result = await req.server.config_amoCRM.request.get(
+			const result = await req.server.client_amoCRM.request.get(
 				"/api/v4/leads"
 			);
 
@@ -29,7 +29,7 @@ const controller = {
 	) => {
 		try {
 			console.log("GET request with query:", req.params.query);
-			const result = await req.server.config_amoCRM.request.get(
+			const result = await req.server.client_amoCRM.request.get(
 				"/api/v4/leads",
 				{
 					query: req.params.query,
@@ -49,7 +49,7 @@ const controller = {
 		try {
 			console.log("POST request...");
 			const requestData: any = req.body;
-			await req.server.config_amoCRM.request.post(
+			await req.server.client_amoCRM.request.post(
 				"/api/v4/leads/complex",
 				requestData
 			);
