@@ -12,9 +12,9 @@ datasource db {
 
 model amoCRM {
   id            Int       @id @default(autoincrement())
-  token_type    String
-  expires_in    Decimal
-  access_token  String
-  refresh_token String
-  expires_at    Decimal
+  tokenType    String
+  expiresIn    Decimal
+  accessToken  String
+  refreshToken String
+  expiresAt    Decimal
 }

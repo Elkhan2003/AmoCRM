@@ -3,12 +3,19 @@ import { Client } from "amocrm-js";
 import fp from "fastify-plugin";
 
 interface tokenType {
-	id: number;
 	token_type: string;
 	expires_in: number;
 	access_token: string;
 	refresh_token: string;
 	expires_at: number;
+}
+
+interface tokenConvertType {
+	tokenType: string;
+	expiresIn: number;
+	accessToken: string;
+	refreshToken: string;
+	expiresAt: number;
 }
 
 const amoCRM = async (app: FastifyInstance) => {
@@ -37,6 +44,14 @@ const amoCRM = async (app: FastifyInstance) => {
 	// If "change" detects any modifications in the "token," it will update the token in Supabase
 	client_amoCRM.token.on("change", async () => {
 		const token: tokenType = client_amoCRM.token.getValue() as tokenType;
+		const tokenConvert: tokenConvertType = {
+			tokenType: token.token_type,
+			expiresIn: token.expires_in,
+			accessToken: token.access_token,
+			refreshToken: token.refresh_token,
+			expiresAt: token.expires_at,
+		} as tokenConvertType;
+
 		try {
 			const existingData = await app.prisma.amoCRM.findUnique({
 				where: { id: 1 },
@@ -44,11 +59,11 @@ const amoCRM = async (app: FastifyInstance) => {
 			if (existingData) {
 				await app.prisma.amoCRM.update({
 					where: { id: 1 },
-					data: token,
+					data: tokenConvert,
 				});
 			} else {
 				await app.prisma.amoCRM.create({
-					data: token,
+					data: tokenConvert,
 				});
 			}
 		} catch (error) {
@@ -67,12 +82,11 @@ const amoCRM = async (app: FastifyInstance) => {
 		if (data) {
 			// Convert Decimal to number
 			const tokenData: tokenType = {
-				id: data.id,
-				token_type: data.token_type,
-				expires_in: +data.expires_in,
-				access_token: data.access_token,
-				refresh_token: data.refresh_token,
-				expires_at: +data.expires_at,
+				token_type: data.tokenType,
+				expires_in: +data.expiresIn,
+				access_token: data.accessToken,
+				refresh_token: data.refreshToken,
+				expires_at: +data.expiresAt,
 			};
 
 			client_amoCRM.token.setValue(tokenData);
