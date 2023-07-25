@@ -6,5 +6,6 @@ const routes = async (app: FastifyInstance) => {
 	app.get("/get", Controller.get);
 	app.get("/get/:query", Controller.getByQuery);
 	app.post("/post", Controller.post);
+	app.patch("/patch", Controller.patch);
 };
 export default routes;

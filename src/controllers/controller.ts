@@ -62,6 +62,24 @@ const controller = {
 			res.status(500).send(err);
 		}
 	},
+
+	patch: async (req: FastifyRequest, res: FastifyReply) => {
+		try {
+			console.log("PATCH request...");
+			const requestData: any = req.body;
+			const result = await req.server.client_amoCRM.request.patch(
+				"/api/v4/leads/custom_fields",
+				requestData
+			);
+			console.log("Successfully edited leads 🚀");
+			return res.status(200).send({
+				message: "Successfully edited leads 🚀",
+				data: result.data,
+			});
+		} catch (err) {
+			res.status(500).send(err);
+		}
+	},
 };
 
 export default controller;

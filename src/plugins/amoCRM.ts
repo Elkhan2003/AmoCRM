@@ -18,15 +18,24 @@ interface tokenConvertType {
 	expiresAt: number;
 }
 
+interface DataAmoCRMType {
+	id: number;
+	tokenType: string;
+	expiresIn: number | any;
+	accessToken: string;
+	refreshToken: string;
+	expiresAt: number | any;
+}
+
 const amoCRM = async (app: FastifyInstance) => {
 	// ! config amoCRM
 	const client_amoCRM = new Client({
-		domain: process.env.AMOCRM_URL || "devx.amocrm.ru",
+		domain: process.env.AMOCRM_URL!,
 		auth: {
-			client_id: process.env.AMOCRM_CLIENT_ID || "",
-			client_secret: process.env.AMOCRM_CLIENT_SECRET || "",
-			redirect_uri: process.env.AMOCRM_REDIRECT_URI || "",
-			code: process.env.AMOCRM_CODE || "",
+			client_id: process.env.AMOCRM_CLIENT_ID!,
+			client_secret: process.env.AMOCRM_CLIENT_SECRET!,
+			redirect_uri: process.env.AMOCRM_REDIRECT_URI!,
+			code: process.env.AMOCRM_CODE!,
 		},
 	});
 
@@ -78,7 +87,9 @@ const amoCRM = async (app: FastifyInstance) => {
 
 	// ! get token
 	try {
-		const data = await app.prisma.amoCRM.findUnique({ where: { id: 1 } });
+		const data: DataAmoCRMType = (await app.prisma.amoCRM.findUnique({
+			where: { id: 1 },
+		})) as DataAmoCRMType;
 		if (data) {
 			// Convert Decimal to number
 			const tokenData: tokenType = {
@@ -87,7 +98,7 @@ const amoCRM = async (app: FastifyInstance) => {
 				access_token: data.accessToken,
 				refresh_token: data.refreshToken,
 				expires_at: +data.expiresAt,
-			};
+			} as tokenType;
 
 			client_amoCRM.token.setValue(tokenData);
 		} else {
