@@ -68,7 +68,7 @@ const controller = {
 			console.log("PATCH request...");
 			const requestData: any = req.body;
 			const result = await req.server.client_amoCRM.request.patch(
-				"/api/v4/leads/custom_fields",
+				"/api/v4/leads",
 				requestData
 			);
 			console.log("Successfully edited leads 🚀");

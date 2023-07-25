@@ -18,15 +18,6 @@ interface tokenConvertType {
 	expiresAt: number;
 }
 
-interface DataAmoCRMType {
-	id: number;
-	tokenType: string;
-	expiresIn: number | any;
-	accessToken: string;
-	refreshToken: string;
-	expiresAt: number | any;
-}
-
 const amoCRM = async (app: FastifyInstance) => {
 	// ! config amoCRM
 	const client_amoCRM = new Client({
@@ -87,9 +78,7 @@ const amoCRM = async (app: FastifyInstance) => {
 
 	// ! get token
 	try {
-		const data: DataAmoCRMType = (await app.prisma.amoCRM.findUnique({
-			where: { id: 1 },
-		})) as DataAmoCRMType;
+		const data = await app.prisma.amoCRM.findUnique({ where: { id: 1 } });
 		if (data) {
 			// Convert Decimal to number
 			const tokenData: tokenType = {
