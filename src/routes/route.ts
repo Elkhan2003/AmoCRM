@@ -1,11 +1,11 @@
 import { FastifyInstance } from "fastify";
-import Controller from "../controllers/controller";
+import { controller } from "../controllers/controller";
 
 const routes = async (app: FastifyInstance) => {
-	app.get("/", Controller.default);
-	app.get("/get", Controller.get);
-	app.get("/get/:query", Controller.getByQuery);
-	app.post("/post", Controller.post);
-	app.patch("/patch", Controller.patch);
+	app.get("/", controller.default);
+	app.get("/get", controller.get);
+	app.get("/get/:query", controller.getByQuery);
+	app.post("/post", controller.post);
+	app.patch("/patch", controller.patch);
 };
 export default routes;
