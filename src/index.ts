@@ -25,6 +25,7 @@ const start = async () => {
 			"http://localhost:3000",
 			"http://127.0.0.1:3000",
 			"https://amocrm-production.up.railway.app",
+			"https://wedevx911.vercel.app",
 		],
 		credentials: true,
 	});
