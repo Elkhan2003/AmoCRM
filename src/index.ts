@@ -15,34 +15,44 @@ declare module "fastify" {
 	}
 }
 
-const server: FastifyInstance = fastify({
-	logger: false,
-});
+const start = async () => {
+	const server: FastifyInstance = fastify({
+		logger: false,
+	});
 
-server.register(fastifyCors, {
-	origin: [
-		"http://localhost:3000",
-		"http://127.0.0.1:3000",
-		"https://amocrm-production.up.railway.app",
-		"https://wedevx.vercel.app",
-		"https://amocrm911.vercel.app",
-	],
-	credentials: true,
-});
+	server.register(fastifyCors, {
+		origin: [
+			"http://localhost:3000",
+			"http://127.0.0.1:3000",
+			"https://amocrm-production.up.railway.app",
+			"https://wedevx.vercel.app",
+			"https://amocrm911.vercel.app"
+		],
+		credentials: true,
+	});
 
-server.register(prisma);
-server.register(amoCRM);
+	server.register(prisma);
+	server.register(amoCRM);
 
-server.register(routes, {
-	prefix: "/",
-});
+	server.register(routes, {
+		prefix: "/",
+	});
 
-const PORT: any = process.env.PORT || 3000;
+	const PORT: any = process.env.PORT || 3000;
 
-server.listen({ port: PORT, host: "0.0.0.0" }, (err, address) => {
-	if (err) {
-		server.log.error(err);
+	try {
+		const address = await server.listen({
+			port: PORT,
+			host: "0.0.0.0",
+		});
+
+		console.log(`${new Date()}`);
+		console.log("server running at: " + address);
+	} catch (error) {
+		console.error(error);
 		process.exit(1);
 	}
-	console.log(`${new Date()}`);
-});
+
+	return server;
+};
+start();
