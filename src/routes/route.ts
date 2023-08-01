@@ -11,6 +11,6 @@ const routes = async (app: FastifyInstance) => {
 
 	// ! Test new functionality
 	app.post("/api/v1/send-sms", otherControllers.sendSmsCodeVerify);
-	app.get("/api/v1/support-connect", otherControllers.supportConnect);
+	app.get("/api/v1/support-connect", otherControllers.connectSupport);
 };
 export default routes;

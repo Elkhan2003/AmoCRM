@@ -125,10 +125,8 @@ const addContactsToAmoCRM = async (
 	}
 };
 
-const supportConnect = async (req: FastifyRequest, res: FastifyReply) => {
-	res.status(200).send({
-		message: "Hello World!",
-	});
+const connectSupport = async (req: FastifyRequest, res: FastifyReply) => {
+	res.status(200);
 };
 
-export default { sendSmsCodeVerify, supportConnect };
+export default { sendSmsCodeVerify, connectSupport };
