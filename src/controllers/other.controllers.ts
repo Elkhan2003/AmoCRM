@@ -10,7 +10,7 @@ const sendSmsCodeVerify = async (req: FastifyRequest, res: FastifyReply) => {
 		const authUser = await req.server.prisma.user.findFirst({
 			where: { id: 1 },
 		});
-		if (!authUser) {
+		if (authUser) {
 			return null;
 		} else {
 			await req.server.prisma.user.create({
