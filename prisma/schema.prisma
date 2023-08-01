@@ -11,10 +11,47 @@ datasource db {
 }
 
 model amoCRM {
-  id            Int       @id @default(autoincrement())
+  id           Int     @id @default(autoincrement())
   tokenType    String
   expiresIn    Decimal
   accessToken  String
   refreshToken String
   expiresAt    Decimal
+}
+
+model User {
+  id              Int      @id @default(autoincrement())
+  firstName       String
+  lastName        String
+  role            UserRole @default(USER)
+  plan            UserPlan @default(FREE)
+  email           String   @unique
+  password        String
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  photo           String?
+  isPhoneVerified Boolean  @default(false)
+  phone           String?
+  traffic         String?
+}
+
+enum UserRole {
+  ADMIN
+  USER
+  BETATESTER
+  MENTOR
+}
+
+enum UserPlan {
+  FREE
+  PAID
+  PRO
+  PREMIUM
+}
+
+enum PlanRange {
+  FREE
+  MONTHLY
+  ANNUALLY
 }

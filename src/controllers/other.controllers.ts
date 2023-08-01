@@ -5,6 +5,31 @@ const sendSmsCodeVerify = async (req: FastifyRequest, res: FastifyReply) => {
 	const { user, phone, traffic }: any = req.body;
 	const amoCRM = req.server;
 
+	const setUser: any = {
+		firstName: user.firstName,
+		lastName: user.lastName,
+		email: user.email,
+		password: "",
+		photo: user.photo,
+		phone: phone,
+		traffic: traffic,
+	};
+
+	try {
+		const authUser = await req.server.prisma.user.findFirst({
+			where: { id: 1 },
+		});
+		if (!authUser) {
+			return null;
+		} else {
+			await req.server.prisma.amoCRM.create({
+				data: setUser,
+			});
+		}
+	} catch (err) {
+		console.log(`${err}`);
+	}
+
 	addContactsToAmoCRM(
 		user.firstName,
 		user.lastName,
