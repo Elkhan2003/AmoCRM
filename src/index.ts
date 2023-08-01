@@ -4,7 +4,7 @@ import fastify, { FastifyInstance } from "fastify";
 import fastifyCors from "@fastify/cors";
 import routes from "./routes/route";
 import prisma from "./plugins/prisma";
-import { PrismaClient, User } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import amoCRM from "./plugins/amoCRM";
 import { Client } from "amocrm-js";
 
@@ -12,7 +12,6 @@ declare module "fastify" {
 	interface FastifyInstance {
 		prisma: PrismaClient;
 		client_amoCRM: Client;
-		user: User;
 	}
 }
 

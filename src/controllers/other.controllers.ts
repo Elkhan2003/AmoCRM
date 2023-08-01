@@ -1,19 +1,10 @@
 import { Client } from "amocrm-js";
+import { User } from "@prisma/client";
 import { FastifyReply, FastifyRequest } from "fastify";
 
 const sendSmsCodeVerify = async (req: FastifyRequest, res: FastifyReply) => {
 	const { user, phone, traffic }: any = req.body;
 	const amoCRM = req.server;
-
-	const setUser: any = {
-		firstName: user.firstName,
-		lastName: user.lastName,
-		email: user.email,
-		password: "",
-		photo: user.photo,
-		phone: phone,
-		traffic: traffic,
-	};
 
 	try {
 		const authUser = await req.server.prisma.user.findFirst({
@@ -22,13 +13,19 @@ const sendSmsCodeVerify = async (req: FastifyRequest, res: FastifyReply) => {
 		if (!authUser) {
 			return null;
 		} else {
-			await req.server.prisma.amoCRM.create({
-				data: setUser,
+			await req.server.prisma.user.create({
+				data: {
+					firstName: user.firstName,
+					lastName: user.lastName,
+					email: user.email,
+					password: "",
+					photo: user.photo,
+					phone: phone,
+					traffic: traffic,
+				} as User,
 			});
 		}
-	} catch (err) {
-		console.log(`${err}`);
-	}
+	} catch (err) {}
 
 	addContactsToAmoCRM(
 		user.firstName,
@@ -126,4 +123,10 @@ const addContactsToAmoCRM = async (
 	}
 };
 
-export default { sendSmsCodeVerify };
+const supportConnect = async (req: FastifyRequest, res: FastifyReply) => {
+	res.status(200).send({
+		message: "Hello World!",
+	});
+};
+
+export default { sendSmsCodeVerify, supportConnect };
