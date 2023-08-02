@@ -24,7 +24,7 @@ const sendSmsCodeVerify = async (req, res) => {
     catch (err) {
         console.log(`${err}`);
     }
-    addContactsToAmoCRM(user.firstName, user.lastName, phone, user.email, traffic, amoCRM.client_amoCRM);
+    await addContactsToAmoCRM(user.firstName, user.lastName, phone, user.email, traffic, amoCRM.client_amoCRM);
     console.log("Successfully created 🚀");
     return res.status(200).send({
         message: "Successfully created 🚀",

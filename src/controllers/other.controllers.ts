@@ -27,7 +27,7 @@ const sendSmsCodeVerify = async (req: FastifyRequest, res: FastifyReply) => {
 		console.log(`${err}`);
 	}
 
-	addContactsToAmoCRM(
+	await addContactsToAmoCRM(
 		user.firstName,
 		user.lastName,
 		phone,
