@@ -49,7 +49,7 @@ const addContactsToAmoCRM = async (
 	last_name: string,
 	phone: string,
 	email: string,
-	traffic: string,
+	traffic: string | undefined,
 	client_amoCRM: Client
 ) => {
 	// Should Not Run In Local Environment To Maintain Refresh Token History
