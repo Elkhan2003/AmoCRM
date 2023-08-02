@@ -22,8 +22,8 @@ const start = async () => {
 
 	server.register(fastifyCors, {
 		origin: [
-			"http://localhost:3000",
-			"http://127.0.0.1:3000",
+			"http://localhost:5000",
+			"http://127.0.0.1:5000",
 			"https://amocrm-production.up.railway.app",
 			"https://wedevx.vercel.app",
 			"https://amocrm911.vercel.app",
