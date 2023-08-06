@@ -43,6 +43,10 @@ const sendSmsCodeVerify = async (req: FastifyRequest, res: FastifyReply) => {
 	});
 };
 
+const checkSmsCodeVerify = async (req: FastifyRequest, res: FastifyReply) => {
+	res.status(200);
+};
+
 // #### HELPER FUNCTION TO ADD CONTACTS TO AMOCRM
 const addContactsToAmoCRM = async (
 	first_name: string,
@@ -123,8 +127,4 @@ const addContactsToAmoCRM = async (
 	}
 };
 
-const connectSupport = async (req: FastifyRequest, res: FastifyReply) => {
-	res.status(200);
-};
-
-export default { sendSmsCodeVerify, connectSupport };
+export default { sendSmsCodeVerify, checkSmsCodeVerify };

@@ -31,6 +31,9 @@ const sendSmsCodeVerify = async (req, res) => {
         data: req.body,
     });
 };
+const checkSmsCodeVerify = async (req, res) => {
+    res.status(200);
+};
 // #### HELPER FUNCTION TO ADD CONTACTS TO AMOCRM
 const addContactsToAmoCRM = async (first_name, last_name, phone, email, traffic, client_amoCRM) => {
     // Should Not Run In Local Environment To Maintain Refresh Token History
@@ -102,7 +105,4 @@ const addContactsToAmoCRM = async (first_name, last_name, phone, email, traffic,
         console.log("AMOCRM ERROR");
     }
 };
-const connectSupport = async (req, res) => {
-    res.status(200);
-};
-exports.default = { sendSmsCodeVerify, connectSupport };
+exports.default = { sendSmsCodeVerify, checkSmsCodeVerify };

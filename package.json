@@ -18,7 +18,8 @@
 		"amocrm-js": "^3.4.2",
 		"dotenv": "^16.3.1",
 		"fastify": "^4.19.2",
-		"fastify-plugin": "^4.5.1"
+		"fastify-plugin": "^4.5.1",
+		"twilio": "^4.14.1"
 	},
 	"devDependencies": {
 		"@types/node": "^20.3.3",

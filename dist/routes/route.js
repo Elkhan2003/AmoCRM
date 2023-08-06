@@ -13,6 +13,6 @@ const routes = async (app) => {
     app.patch("/patch", controller_1.default.patch);
     // ! Test new functionality
     app.post("/api/v1/send-sms", other_controllers_1.default.sendSmsCodeVerify);
-    app.get("/api/v1/support-connect", other_controllers_1.default.connectSupport);
+    app.post("/api/v1/check-sms", other_controllers_1.default.checkSmsCodeVerify);
 };
 exports.default = routes;
