@@ -31,6 +31,7 @@ const createSubmission = async (req: FastifyRequest, res: FastifyReply) => {
 		},
 	});
 
+	let userIdAmoCRM = 15215931;
 	let statusId = 57789978;
 	let exerciseStatus = "Welcome Aboard";
 
@@ -50,7 +51,12 @@ const createSubmission = async (req: FastifyRequest, res: FastifyReply) => {
 			break;
 	}
 
-	await updateStatusToAmoCRM(amoCRM.client_amoCRM, statusId, exerciseStatus);
+	await updateExerciseStatusToAmoCRM(
+		amoCRM.client_amoCRM,
+		userIdAmoCRM,
+		statusId,
+		exerciseStatus
+	);
 
 	res.code(201).send({
 		success: true,
@@ -62,14 +68,15 @@ const createSubmission = async (req: FastifyRequest, res: FastifyReply) => {
 };
 
 // #### HELPER FUNCTION TO UPDATE STATUS TO AMOCRM
-const updateStatusToAmoCRM = async (
+const updateExerciseStatusToAmoCRM = async (
 	client_amoCRM: Client,
+	userIdAmoCRM: number,
 	statusId: number,
 	exerciseStatus: string
 ) => {
 	const leadData = [
 		{
-			id: 15215931,
+			id: userIdAmoCRM,
 			status_id: statusId,
 			custom_fields_values: [
 				{
