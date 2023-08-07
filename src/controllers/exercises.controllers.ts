@@ -34,18 +34,20 @@ const createSubmission = async (req: FastifyRequest, res: FastifyReply) => {
 	let statusId = 57789978;
 	let exerciseStatus = "Welcome Aboard";
 
-	if (checkExerciseStatus.length === 1) {
-		exerciseStatus = "Class 1";
-	} else if (checkExerciseStatus.length === 2) {
-		exerciseStatus = "Class 1.1";
-	} else if (checkExerciseStatus.length === 3) {
-		exerciseStatus = "Class 1.2";
-	} else if (checkExerciseStatus.length === 4) {
-		exerciseStatus = "Class 2.0";
-	}
-
-	if (exerciseStatus === "Class 2.0") {
-		statusId = 57789982;
+	switch (checkExerciseStatus.length) {
+		case 1:
+			exerciseStatus = "Class 1";
+			break;
+		case 2:
+			exerciseStatus = "Class 1.1";
+			break;
+		case 3:
+			exerciseStatus = "Class 1.2";
+			break;
+		case 4:
+			exerciseStatus = "Class 2.0";
+			statusId = 57789982;
+			break;
 	}
 
 	await updateStatusToAmoCRM(amoCRM.client_amoCRM, statusId, exerciseStatus);
