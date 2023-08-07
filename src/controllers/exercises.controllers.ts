@@ -62,7 +62,6 @@ const createSubmission = async (req: FastifyRequest, res: FastifyReply) => {
 		success: true,
 		data: {
 			submission,
-			checkExerciseStatus,
 		},
 	});
 };
