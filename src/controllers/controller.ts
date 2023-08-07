@@ -12,7 +12,7 @@ const controller = {
 		try {
 			console.log("GET request...");
 			const result = await req.server.client_amoCRM.request.get(
-				"/api/v4/leads"
+				"/api/v4/leads/custom_fields"
 			);
 
 			console.log("Successfully getting data 🏃‍♂️🏃‍♀️");

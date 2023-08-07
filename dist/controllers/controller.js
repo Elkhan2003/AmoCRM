@@ -10,7 +10,7 @@ const controller = {
     get: async (req, res) => {
         try {
             console.log("GET request...");
-            const result = await req.server.client_amoCRM.request.get("/api/v4/leads");
+            const result = await req.server.client_amoCRM.request.get("/api/v4/leads/custom_fields");
             console.log("Successfully getting data 🏃‍♂️🏃‍♀️");
             return res.status(200).send({
                 message: result.data,

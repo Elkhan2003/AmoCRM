@@ -20,20 +20,33 @@ model amoCRM {
 }
 
 model User {
-  id              Int      @id @default(autoincrement())
+  id              Int          @id @default(autoincrement())
   firstName       String
   lastName        String
-  role            UserRole @default(USER)
-  plan            UserPlan @default(FREE)
-  email           String   @unique
+  role            UserRole     @default(USER)
+  plan            UserPlan     @default(FREE)
+  email           String       @unique
   password        String
-  isActive        Boolean  @default(true)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  isActive        Boolean      @default(true)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
   photo           String?
-  isPhoneVerified Boolean  @default(false)
+  isPhoneVerified Boolean      @default(false)
   phone           String?
   traffic         String?
+  Submission      Submission[]
+}
+
+model Submission {
+  exerciseId Int              @default(autoincrement())
+  userId     Int
+  status     SubmissionStatus @default(TODO)
+  code       Json
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId])
 }
 
 enum UserRole {
@@ -54,4 +67,10 @@ enum PlanRange {
   FREE
   MONTHLY
   ANNUALLY
+}
+
+enum SubmissionStatus {
+  TODO
+  SOLVED
+  ATTEMPTED
 }

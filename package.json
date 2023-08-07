@@ -14,7 +14,7 @@
 	"license": "ISC",
 	"dependencies": {
 		"@fastify/cors": "^8.3.0",
-		"@prisma/client": "^5.0.0",
+		"@prisma/client": "^5.1.1",
 		"amocrm-js": "^3.4.2",
 		"dotenv": "^16.3.1",
 		"fastify": "^4.19.2",
