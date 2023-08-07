@@ -27,17 +27,24 @@ const createSubmission = async (req, res) => {
             status: "SOLVED",
         },
     });
-    let amoCRMStatus = "Welcome Aboard";
-    if (checkExerciseStatus.length === 1) {
-        amoCRMStatus = "Class 1";
+    let statusId = 57789978;
+    let exerciseStatus = "Welcome Aboard";
+    switch (checkExerciseStatus.length) {
+        case 1:
+            exerciseStatus = "Class 1";
+            break;
+        case 2:
+            exerciseStatus = "Class 1.1";
+            break;
+        case 3:
+            exerciseStatus = "Class 1.2";
+            break;
+        case 4:
+            exerciseStatus = "Class 2.0";
+            statusId = 57789982;
+            break;
     }
-    else if (checkExerciseStatus.length === 2) {
-        amoCRMStatus = "Class 1.1";
-    }
-    else if (checkExerciseStatus.length === 3) {
-        amoCRMStatus = "Class 1.2";
-    }
-    await updateStatusToAmoCRM(amoCRM.client_amoCRM, amoCRMStatus);
+    await updateStatusToAmoCRM(amoCRM.client_amoCRM, statusId, exerciseStatus);
     res.code(201).send({
         success: true,
         data: {
@@ -47,18 +54,18 @@ const createSubmission = async (req, res) => {
     });
 };
 // #### HELPER FUNCTION TO UPDATE STATUS TO AMOCRM
-const updateStatusToAmoCRM = async (client_amoCRM, value) => {
+const updateStatusToAmoCRM = async (client_amoCRM, statusId, exerciseStatus) => {
     const leadData = [
         {
             id: 15215931,
-            status_id: 57789982,
+            status_id: statusId,
             custom_fields_values: [
                 {
                     field_id: 683145,
                     field_name: "Free Trial Progress",
                     values: [
                         {
-                            value,
+                            value: exerciseStatus,
                         },
                     ],
                 },
