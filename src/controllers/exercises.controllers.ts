@@ -7,8 +7,10 @@ const createSubmission = async (req: FastifyRequest, res: FastifyReply) => {
 
 	const submission = await req.server.prisma.submission.upsert({
 		where: {
-			exerciseId,
-			userId: user.id,
+			exerciseId_userId: {
+				exerciseId,
+				userId: user.id,
+			},
 		},
 		create: {
 			userId: user.id,
