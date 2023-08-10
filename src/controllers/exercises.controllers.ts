@@ -76,6 +76,10 @@ const createSubmission = async (req: FastifyRequest, res: FastifyReply) => {
 			exerciseStatus = "Class 2.0";
 			statusId = 57789982;
 			break;
+		default:
+			exerciseStatus = "Class 2.0";
+			statusId = 57789982;
+			break;
 	}
 
 	await updateExerciseStatusToAmoCRM(
