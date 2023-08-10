@@ -115,7 +115,7 @@ const updateExerciseStatusToAmoCRM = async (
 	try {
 		await client_amoCRM.request.patch("/api/v4/leads", leadData);
 	} catch (err) {
-		console.log("AMOCRM ERROR");
+		console.log("AMOCRM ERROR UPDATE ExerciseStatus");
 	}
 };
 export default { createSubmission };
