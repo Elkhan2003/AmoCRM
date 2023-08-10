@@ -1,6 +1,14 @@
 import { Client } from "amocrm-js";
 import { FastifyReply, FastifyRequest } from "fastify";
 
+interface AmoCRMLead {
+	_embedded: {
+		leads: {
+			id: number;
+		}[];
+	};
+}
+
 const createSubmission = async (req: FastifyRequest, res: FastifyReply) => {
 	const { user, exerciseId, status, code }: any = req.body;
 	const amoCRM = req.server;
@@ -41,13 +49,11 @@ const createSubmission = async (req: FastifyRequest, res: FastifyReply) => {
 			return null;
 		}
 		const { firstName, lastName } = user;
-		const getUserIdAmoCRM = await req.server.client_amoCRM.request.get(
-			"/api/v4/leads",
-			{
+		const getUserIdAmoCRM =
+			await req.server.client_amoCRM.request.get<AmoCRMLead>("/api/v4/leads", {
 				query: `${firstName} ${lastName}`,
-			}
-		);
-		const resultUserAmoCRM: any = getUserIdAmoCRM.data;
+			});
+		const resultUserAmoCRM = getUserIdAmoCRM.data;
 		const leadId = resultUserAmoCRM._embedded.leads[0]?.id;
 		return leadId || null;
 	};
@@ -90,7 +96,7 @@ const createSubmission = async (req: FastifyRequest, res: FastifyReply) => {
 // #### HELPER FUNCTION TO UPDATE STATUS TO AMOCRM
 const updateExerciseStatusToAmoCRM = async (
 	client_amoCRM: Client,
-	userIdAmoCRM: number,
+	userIdAmoCRM: number | null,
 	statusId: number,
 	exerciseStatus: string
 ) => {
