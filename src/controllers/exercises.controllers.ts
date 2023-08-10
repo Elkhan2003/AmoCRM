@@ -37,23 +37,18 @@ const createSubmission = async (req: FastifyRequest, res: FastifyReply) => {
 				id: userId,
 			},
 		});
-
 		if (!user) {
 			return null;
 		}
-
 		const { firstName, lastName } = user;
-
 		const getUserIdAmoCRM = await req.server.client_amoCRM.request.get(
 			"/api/v4/leads",
 			{
 				query: `${firstName} ${lastName}`,
 			}
 		);
-
 		const resultUserAmoCRM: any = getUserIdAmoCRM.data;
 		const leadId = resultUserAmoCRM._embedded.leads[0]?.id;
-
 		return leadId || null;
 	};
 
