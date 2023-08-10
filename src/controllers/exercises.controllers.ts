@@ -31,7 +31,33 @@ const createSubmission = async (req: FastifyRequest, res: FastifyReply) => {
 		},
 	});
 
-	let userIdAmoCRM = 15215931;
+	const getUserAndLeadId = async (userId: number) => {
+		const user = await req.server.prisma.user.findFirst({
+			where: {
+				id: userId,
+			},
+		});
+
+		if (!user) {
+			return null;
+		}
+
+		const { firstName, lastName } = user;
+
+		const getUserIdAmoCRM = await req.server.client_amoCRM.request.get(
+			"/api/v4/leads",
+			{
+				query: `${firstName} ${lastName}`,
+			}
+		);
+
+		const resultUserAmoCRM: any = getUserIdAmoCRM.data;
+		const leadId = resultUserAmoCRM._embedded.leads[0]?.id;
+
+		return leadId || null;
+	};
+
+	const userIdAmoCRM = await getUserAndLeadId(user.id);
 	let statusId = 57789978;
 	let exerciseStatus = "Welcome Aboard";
 
