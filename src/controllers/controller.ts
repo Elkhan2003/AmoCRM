@@ -68,7 +68,7 @@ const controller = {
 				"/api/v4/leads",
 				{
 					"filter[name]": req.params.name,
-					"order[created_at]": "desc",
+					"order[updated_at]": "desc",
 					limit: 1,
 				}
 			);

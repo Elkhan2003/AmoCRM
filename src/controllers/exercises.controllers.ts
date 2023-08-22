@@ -54,7 +54,7 @@ const createSubmission = async (req: FastifyRequest, res: FastifyReply) => {
 		const getUserIdAmoCRM =
 			await req.server.client_amoCRM.request.get<AmoCRMLead>("/api/v4/leads", {
 				"filter[name]": `${firstName} ${lastName}`,
-				"order[created_at]": "desc",
+				"order[updated_at]": "desc",
 				limit: 1,
 			});
 		const resultUserAmoCRM = getUserIdAmoCRM.data;
