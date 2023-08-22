@@ -39,6 +39,8 @@ const createSubmission = async (req: FastifyRequest, res: FastifyReply) => {
 		},
 	});
 
+	console.log(checkExerciseStatus.length);
+
 	const getUserAndLeadId = async (userId: number) => {
 		const user = await req.server.prisma.user.findFirst({
 			where: {
@@ -51,7 +53,9 @@ const createSubmission = async (req: FastifyRequest, res: FastifyReply) => {
 		const { firstName, lastName } = user;
 		const getUserIdAmoCRM =
 			await req.server.client_amoCRM.request.get<AmoCRMLead>("/api/v4/leads", {
-				query: `${firstName} ${lastName}`,
+				"filter[name]": `${firstName} ${lastName}`,
+				"order[created_at]": "desc",
+				limit: 1,
 			});
 		const resultUserAmoCRM = getUserIdAmoCRM.data;
 		const leadId = resultUserAmoCRM._embedded.leads[0]?.id;

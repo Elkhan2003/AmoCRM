@@ -4,9 +4,10 @@ import otherControllers from "../controllers/other.controllers";
 import exercisesControllers from "../controllers/exercises.controllers";
 
 const routes = async (app: FastifyInstance) => {
+	app.get("/person/:query", controller.getPerson);
 	app.get("/", controller.default);
 	app.get("/get", controller.get);
-	app.get("/get/:query", controller.getByQuery);
+	app.get("/get/:name", controller.getByQuery);
 	app.post("/post", controller.post);
 	app.patch("/patch", controller.patch);
 
