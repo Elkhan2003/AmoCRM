@@ -19,3 +19,5 @@ const routes = async (app: FastifyInstance) => {
 	app.post("/api/v1/submissions", exercisesControllers.createSubmission);
 };
 export default routes;
+
+// ! For Burma
