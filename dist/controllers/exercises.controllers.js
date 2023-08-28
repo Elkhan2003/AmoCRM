@@ -27,6 +27,27 @@ const createSubmission = async (req, res) => {
             status: "SOLVED",
         },
     });
+    console.log(checkExerciseStatus.length);
+    const getUserAndLeadId = async (userId) => {
+        const user = await req.server.prisma.user.findFirst({
+            where: {
+                id: userId,
+            },
+        });
+        if (!user) {
+            return null;
+        }
+        const { firstName, lastName } = user;
+        const getUserIdAmoCRM = await req.server.client_amoCRM.request.get("/api/v4/leads", {
+            "filter[name]": `${firstName} ${lastName}`,
+            "order[updated_at]": "desc",
+            limit: 1,
+        });
+        const resultUserAmoCRM = getUserIdAmoCRM.data;
+        const leadId = resultUserAmoCRM._embedded.leads[0]?.id;
+        return leadId || null;
+    };
+    const userIdAmoCRM = await getUserAndLeadId(user.id);
     let statusId = 57789978;
     let exerciseStatus = "Welcome Aboard";
     switch (checkExerciseStatus.length) {
@@ -43,21 +64,24 @@ const createSubmission = async (req, res) => {
             exerciseStatus = "Class 2.0";
             statusId = 57789982;
             break;
+        default:
+            exerciseStatus = "Class 2.0";
+            statusId = 57789982;
+            break;
     }
-    await updateStatusToAmoCRM(amoCRM.client_amoCRM, statusId, exerciseStatus);
+    await updateExerciseStatusToAmoCRM(amoCRM.client_amoCRM, userIdAmoCRM, statusId, exerciseStatus);
     res.code(201).send({
         success: true,
         data: {
             submission,
-            checkExerciseStatus,
         },
     });
 };
 // #### HELPER FUNCTION TO UPDATE STATUS TO AMOCRM
-const updateStatusToAmoCRM = async (client_amoCRM, statusId, exerciseStatus) => {
+const updateExerciseStatusToAmoCRM = async (client_amoCRM, userIdAmoCRM, statusId, exerciseStatus) => {
     const leadData = [
         {
-            id: 15215931,
+            id: userIdAmoCRM,
             status_id: statusId,
             custom_fields_values: [
                 {
@@ -76,7 +100,7 @@ const updateStatusToAmoCRM = async (client_amoCRM, statusId, exerciseStatus) => 
         await client_amoCRM.request.patch("/api/v4/leads", leadData);
     }
     catch (err) {
-        console.log("AMOCRM ERROR");
+        console.log("AMOCRM ERROR UPDATE ExerciseStatus");
     }
 };
 exports.default = { createSubmission };

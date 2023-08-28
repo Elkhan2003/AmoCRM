@@ -7,9 +7,10 @@ const controller_1 = __importDefault(require("../controllers/controller"));
 const other_controllers_1 = __importDefault(require("../controllers/other.controllers"));
 const exercises_controllers_1 = __importDefault(require("../controllers/exercises.controllers"));
 const routes = async (app) => {
+    app.get("/person/:query", controller_1.default.getPerson);
     app.get("/", controller_1.default.default);
     app.get("/get", controller_1.default.get);
-    app.get("/get/:query", controller_1.default.getByQuery);
+    app.get("/get/:name", controller_1.default.getByQuery);
     app.post("/post", controller_1.default.post);
     app.patch("/patch", controller_1.default.patch);
     // ! Test new functionality
