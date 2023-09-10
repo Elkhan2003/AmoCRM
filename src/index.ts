@@ -28,6 +28,7 @@ const start = async () => {
 			"https://amocrm-production.up.railway.app",
 			"https://wedevx.vercel.app",
 			"https://amocrm911.vercel.app",
+			"https://amo-crm-ncl1.vercel.app"
 		],
 		credentials: true,
 	});
